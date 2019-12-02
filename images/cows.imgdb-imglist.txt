@@ -1,0 +1,1 @@
+cow1|c:\TestProjects\Android\CowImage1\images\cow1.jpg|0.1
