@@ -51,7 +51,7 @@ public class AugmentedImageActivity extends AppCompatActivity {
 
   // Augmented image and its associated center pose anchor, keyed by the augmented image in
   // the database.
-//  private final Map<AugmentedImage, AugmentedImageNode> augmentedImageMap = new HashMap<>();
+  private final Map<AugmentedImage, CowImageNode> cowImageMap = new HashMap<>();
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -78,10 +78,7 @@ public class AugmentedImageActivity extends AppCompatActivity {
    * @param frameTime - time since last frame.
    */
   private void onUpdateFrame(FrameTime frameTime) {
-//    Log.i("AugmentedImageActivity", "onUpdateFrame: " + frameTime.getStartSeconds());
     Frame frame = arFragment.getArSceneView().getArFrame();
-
-//    Frame frame = null;
 
     // If there is no frame, just return.
     if (frame == null) {
@@ -90,33 +87,33 @@ public class AugmentedImageActivity extends AppCompatActivity {
 
     Collection<AugmentedImage> updatedAugmentedImages =
         frame.getUpdatedTrackables(AugmentedImage.class);
-    Log.i("AugmentedImageActivity", "onUpdateFrame: " + updatedAugmentedImages.size());
-//    for (AugmentedImage augmentedImage : updatedAugmentedImages) {
-//      switch (augmentedImage.getTrackingState()) {
-//        case PAUSED:
-//          // When an image is in PAUSED state, but the camera is not PAUSED, it has been detected,
-//          // but not yet tracked.
+
+    for (AugmentedImage augmentedImage : updatedAugmentedImages) {
+      switch (augmentedImage.getTrackingState()) {
+        case PAUSED:
+          // When an image is in PAUSED state, but the camera is not PAUSED, it has been detected,
+          // but not yet tracked.
 //          String text = "Detected Image " + augmentedImage.getIndex();
 //          SnackbarHelper.getInstance().showMessage(this, text);
-//          break;
-//
-//        case TRACKING:
-//          // Have to switch to UI Thread to update View.
+          break;
+
+        case TRACKING:
+          // Have to switch to UI Thread to update View.
 //          fitToScanView.setVisibility(View.GONE);
-//
-//          // Create a new anchor for newly found images.
-//          if (!augmentedImageMap.containsKey(augmentedImage)) {
-//            AugmentedImageNode node = new AugmentedImageNode(this);
-//            node.setImage(augmentedImage);
-//            augmentedImageMap.put(augmentedImage, node);
-//            arFragment.getArSceneView().getScene().addChild(node);
-//          }
-//          break;
-//
-//        case STOPPED:
-//          augmentedImageMap.remove(augmentedImage);
-//          break;
-//      }
-//    }
+
+          // Create a new anchor for newly found images.
+          if (!cowImageMap.containsKey(augmentedImage)) {
+            CowImageNode node = new CowImageNode(this);
+            node.setImage(augmentedImage);
+              cowImageMap.put(augmentedImage, node);
+            arFragment.getArSceneView().getScene().addChild(node);
+          }
+          break;
+
+        case STOPPED:
+            cowImageMap.remove(augmentedImage);
+          break;
+      }
+    }
   }
 }
