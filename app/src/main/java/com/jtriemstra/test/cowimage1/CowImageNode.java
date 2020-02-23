@@ -59,6 +59,53 @@ public class CowImageNode extends AnchorNode {
     thisContext = context;
   }
 
+  public void createCornersFromMaterial(Material material){
+    Vector3 localPosition = new Vector3();
+    ModelRenderable cubeModel;
+    Node cornerNode;
+    Vector3 size = new Vector3(0.01f, 0.01f, 0.01f);
+
+    localPosition.set(-0.5f * image.getExtentX(), -0.00f, -0.5f * image.getExtentZ());
+
+    cubeModel = ShapeFactory.makeCube(size, localPosition, material);
+    cubeModel.setShadowCaster(false);
+    cubeModel.setShadowReceiver(false);
+
+    cornerNode = new Node();
+    cornerNode.setParent(this);
+    cornerNode.setRenderable(cubeModel);
+
+    localPosition.set(-0.5f * image.getExtentX(), -0.00f, 0.5f * image.getExtentZ());
+
+    cubeModel = ShapeFactory.makeCube(size, localPosition, material);
+    cubeModel.setShadowCaster(false);
+    cubeModel.setShadowReceiver(false);
+
+    cornerNode = new Node();
+    cornerNode.setParent(this);
+    cornerNode.setRenderable(cubeModel);
+
+    localPosition.set(0.5f * image.getExtentX(), -0.00f, 0.5f * image.getExtentZ());
+
+    cubeModel = ShapeFactory.makeCube(size, localPosition, material);
+    cubeModel.setShadowCaster(false);
+    cubeModel.setShadowReceiver(false);
+
+    cornerNode = new Node();
+    cornerNode.setParent(this);
+    cornerNode.setRenderable(cubeModel);
+
+    localPosition.set(0.5f * image.getExtentX(), -0.00f, -0.5f * image.getExtentZ());
+
+    cubeModel = ShapeFactory.makeCube(size, localPosition, material);
+    cubeModel.setShadowCaster(false);
+    cubeModel.setShadowReceiver(false);
+
+    cornerNode = new Node();
+    cornerNode.setParent(this);
+    cornerNode.setRenderable(cubeModel);
+
+  }
   /**
    * Called when the AugmentedImage is detected and should be rendered. A Sceneform node tree is
    * created based on an Anchor created from the image. The corners are then positioned based on the
@@ -74,19 +121,7 @@ public class CowImageNode extends AnchorNode {
     MaterialFactory.makeOpaqueWithColor(thisContext, new Color(android.graphics.Color.RED))
             .thenAccept(
                     material -> {
-                      Vector3 localPosition = new Vector3();
-                      localPosition.set(-0.5f * image.getExtentX(), -0.00f, -0.5f * image.getExtentZ());
-
-                      Vector3 size = new Vector3(0.02f, 0.02f, 0.02f);
-                      ModelRenderable model = ShapeFactory.makeCube(size, localPosition, material);
-                      model.setShadowCaster(false);
-                      model.setShadowReceiver(false);
-
-                      Node cornerNode;
-                      cornerNode = new Node();
-                      cornerNode.setParent(this);
-                      //cornerNode.setLocalPosition(localPosition);
-                      cornerNode.setRenderable(model);
+                      createCornersFromMaterial(material);
                     }
             );
 
