@@ -1,0 +1,9 @@
+cow1|c:\TestProjects\Android\CowImage1\images1\cow1.jpg|0.1
+cow2|c:\TestProjects\Android\CowImage1\images1\cow2.jpg|0.1
+cow3|c:\TestProjects\Android\CowImage1\images1\cow3.jpg|0.1
+cow4|c:\TestProjects\Android\CowImage1\images1\cow4.jpg|0.1
+cow5|c:\TestProjects\Android\CowImage1\images1\cow5.jpg|0.1
+cow6|c:\TestProjects\Android\CowImage1\images1\cow6.jpg|0.1
+cow7|c:\TestProjects\Android\CowImage1\images1\cow7.jpg|0.1
+cow8|c:\TestProjects\Android\CowImage1\images1\cow8.jpg|0.1
+cow9|c:\TestProjects\Android\CowImage1\images1\cow9.jpg|0.1

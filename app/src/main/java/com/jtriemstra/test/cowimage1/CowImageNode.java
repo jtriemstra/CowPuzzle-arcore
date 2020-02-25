@@ -17,6 +17,7 @@
 package com.jtriemstra.test.cowimage1;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.util.Log;
 
@@ -29,6 +30,7 @@ import com.google.ar.sceneform.rendering.Material;
 import com.google.ar.sceneform.rendering.MaterialFactory;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.rendering.ShapeFactory;
+import com.google.ar.sceneform.rendering.Texture;
 import com.google.ar.sceneform.ux.TransformableNode;
 
 import java.util.concurrent.CompletableFuture;
@@ -63,19 +65,10 @@ public class CowImageNode extends AnchorNode {
     Vector3 localPosition = new Vector3();
     ModelRenderable cubeModel;
     Node cornerNode;
-    Vector3 size = new Vector3(0.01f, 0.01f, 0.01f);
+    Vector3 size = new Vector3(image.getExtentX(), 0.001f, image.getExtentZ());
 
-    localPosition.set(-0.5f * image.getExtentX(), -0.00f, -0.5f * image.getExtentZ());
-
-    cubeModel = ShapeFactory.makeCube(size, localPosition, material);
-    cubeModel.setShadowCaster(false);
-    cubeModel.setShadowReceiver(false);
-
-    cornerNode = new Node();
-    cornerNode.setParent(this);
-    cornerNode.setRenderable(cubeModel);
-
-    localPosition.set(-0.5f * image.getExtentX(), -0.00f, 0.5f * image.getExtentZ());
+    //localPosition.set(-0.5f * image.getExtentX(), 0.00f, -0.5f * image.getExtentZ());
+    localPosition.set(0.00f, 0.00f, 0.00f);
 
     cubeModel = ShapeFactory.makeCube(size, localPosition, material);
     cubeModel.setShadowCaster(false);
@@ -85,26 +78,25 @@ public class CowImageNode extends AnchorNode {
     cornerNode.setParent(this);
     cornerNode.setRenderable(cubeModel);
 
-    localPosition.set(0.5f * image.getExtentX(), -0.00f, 0.5f * image.getExtentZ());
 
-    cubeModel = ShapeFactory.makeCube(size, localPosition, material);
-    cubeModel.setShadowCaster(false);
-    cubeModel.setShadowReceiver(false);
 
-    cornerNode = new Node();
-    cornerNode.setParent(this);
-    cornerNode.setRenderable(cubeModel);
+Log.i("CowImageNode", image.getName() + " = " + image.getCenterPose().toString());
 
-    localPosition.set(0.5f * image.getExtentX(), -0.00f, -0.5f * image.getExtentZ());
+  }
 
-    cubeModel = ShapeFactory.makeCube(size, localPosition, material);
-    cubeModel.setShadowCaster(false);
-    cubeModel.setShadowReceiver(false);
-
-    cornerNode = new Node();
-    cornerNode.setParent(this);
-    cornerNode.setRenderable(cubeModel);
-
+  private int getDrawableByName(String name){
+    switch(name){
+      case "cow1": return R.drawable.cow1;
+      case "cow2": return R.drawable.cow2;
+      case "cow3": return R.drawable.cow3;
+      case "cow4": return R.drawable.cow4;
+      case "cow5": return R.drawable.cow5;
+      case "cow6": return R.drawable.cow6;
+      case "cow7": return R.drawable.cow7;
+      case "cow8": return R.drawable.cow8;
+      case "cow9": return R.drawable.cow9;
+      default: throw new RuntimeException("invalid image name");
+    }
   }
   /**
    * Called when the AugmentedImage is detected and should be rendered. A Sceneform node tree is
@@ -116,14 +108,29 @@ public class CowImageNode extends AnchorNode {
   public void setImage(AugmentedImage image) {
     this.image = image;
 
-    Material m;
+    Texture.Sampler sampler = Texture.Sampler.builder()
+            .setWrapMode(Texture.Sampler.WrapMode.REPEAT)
+            .build();
 
-    MaterialFactory.makeOpaqueWithColor(thisContext, new Color(android.graphics.Color.RED))
+    Texture.builder()
+            .setSampler(sampler)
+            .setSource(thisContext, getDrawableByName(image.getName()))
+            .build()
+            .thenCompose(texture -> {
+                    return MaterialFactory.makeOpaqueWithTexture(thisContext, texture);
+            })
+            .thenAccept(material -> {
+                    createCornersFromMaterial(material);
+            });
+
+//    MaterialFactory.makeOpaqueWithTexture(thisContext, )
+
+    /*MaterialFactory.makeOpaqueWithColor(thisContext, new Color(android.graphics.Color.RED))
             .thenAccept(
                     material -> {
                       createCornersFromMaterial(material);
                     }
-            );
+            );*/
 
 
     // Set the anchor based on the center of the image.
